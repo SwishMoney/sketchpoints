@@ -1,0 +1,22 @@
+{
+  "name": "ua-backend",
+  "version": "1.0.0",
+  "description": "Backend for the UltimateApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swishmoney/ultimateapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swishmoney/ultimateapp/issues"
+  },
+  "homepage": "https://github.com/swishmoney/ultimateapp#readme",
+  "dependencies": {
+    "graphql": "^0.11.7"
+  }
+}

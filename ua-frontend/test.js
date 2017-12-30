@@ -18,7 +18,7 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting()
 );
 // Then we find all the tests.
-const contextApps = require.context('./apps', true, /\.spec\.ts$/);
+const contextApps = require.context('./apps', true, /^.(?:(?!platforms|tns_modules).)*\.spec\.ts$/);// /\.spec\.ts$/);
 // And load the modules.
 contextApps.keys().map(contextApps);
 

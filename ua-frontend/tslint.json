@@ -113,8 +113,8 @@
     "nx-enforce-module-boundaries": [
       true,
       {
-        "npmScope": "UltimateApp",
-        "lazyLoad": []
+        "lazyLoad": [],
+        "allow": []
       }
     ]
   }

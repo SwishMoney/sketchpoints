@@ -1,7 +1,9 @@
 # compiled output
 dist/
+ua-backend/dist/
 tmp/
 out-tsc/
+env.json
 
 # dependencies
 node_modules/

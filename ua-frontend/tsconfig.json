@@ -16,12 +16,14 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@UltimateApp/*": [
+      "@ultimate-app/*": [
         "libs/*"
       ]
     }
   },
   "exclude": [
+    "apps/mobile",
+    "libs/mobile",
     "node_modules",
     "tmp"
   ]

@@ -1,24 +1,23 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
+    "outDir": "./dist/out-tsc/spec",
     "module": "commonjs",
     "target": "es5",
     "types": [
       "jasmine",
       "node"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@UltimateApp/*": [
-        "libs/*"
-      ]
-    }
+    ]
   },
   "include": [
     "**/*.ts"
   ],
   "exclude": [
+    "apps/mobile",
+    "libs/mobile",
+    "**/e2e/*.ts",
+    "**/*.e2e-spec.ts",
+    "**/*.po.ts",
     "node_modules",
     "tmp"
   ]

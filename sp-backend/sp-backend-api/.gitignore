@@ -1,0 +1,19 @@
+# package directories
+node_modules
+
+# TypeScript
+_dist
+
+# AWS Credentials
+.aws
+
+# Docker
+_docker
+
+# Misc
+.DS_Store
+npm-debug.log*
+.build
+
+# Test File
+src/playground.ts

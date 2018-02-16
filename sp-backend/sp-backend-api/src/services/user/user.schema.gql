@@ -1,0 +1,110 @@
+type UserPermissions {
+  canCreateNewTickets: Boolean!
+  canCommentOnTickets: Boolean!
+  canVoteOnTickets: Boolean!
+  canViewSpam: Boolean!
+  canUpdateTickets: Boolean!
+  canUpdateCompanies: Boolean!
+  canUpdateUsers: Boolean!
+}
+
+type User {
+  id: String!
+  username: String!
+  firstName: String
+  lastName: String
+  email: String!
+  companyId: String
+  companySlug: String
+  companyName: String
+  permissions: UserPermissions
+  createdDate: String
+  emailVerifiedDate: String
+}
+
+# Responses
+
+type CreateAccountResponse {
+  user: User!
+  jwt: String!
+}
+
+type SuccessFailResponse {
+  success: Boolean!
+}
+
+type UserSearchResponse {
+  users: [User]!
+}
+
+type UserTicketResponse {
+  user: User!
+  tickets: [Ticket!]
+}
+
+# Inputs
+
+input UserInput {
+  username: String!
+  firstName: String
+  lastName: String
+  email: String!
+  password: String
+}
+
+input CreateAccountInput {
+  token: String!
+  user: UserInput!
+}
+
+input VerifyEmailInput {
+  code: String!
+}
+
+input SendForgotPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  code: String
+  email: String!
+  password: String!
+}
+
+input SendCompanyAuthEmailInput {
+  companyId: String!
+  username: String!
+  email: String!
+}
+
+input AuthenticateCompanyEmployeeInput {
+  companySlug: String!
+  code: String!
+}
+
+input UpdateMyProfileInput {
+  email: String
+  firstName: String
+  lastName: String
+}
+
+# Query + Mutation
+
+type Query {
+  me: User
+  searchUsers(searchTerm: String!): UserSearchResponse
+  fetchUserAndTickets(id: String!): UserTicketResponse
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!): CreateAccountResponse
+  verifyEmailAddress(input: VerifyEmailInput!): SuccessFailResponse
+  sendForgotPasswordEmail(input: SendForgotPasswordInput!): SuccessFailResponse
+  resetPassword(input: ResetPasswordInput!): CreateAccountResponse
+  updateMyProfile(input: UpdateMyProfileInput!): User
+  sendCompanyAuthEmail(input: SendCompanyAuthEmailInput!): SuccessFailResponse
+  authenticateCompanyEmployee(
+    input: AuthenticateCompanyEmployeeInput!
+  ): CreateAccountResponse
+  unsubscribe(userId: String!): SuccessFailResponse
+}

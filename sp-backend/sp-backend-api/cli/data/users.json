@@ -1,0 +1,14 @@
+[
+  {
+    email: 'jeff@gethuman.com',
+    firstName: 'Jeff',
+    lastName: 'Whelpley',
+    username: 'jeff'
+  },
+  {
+    email: 'walkerrunpdx@gmail.com',
+    firstName: 'Nathan',
+    lastName: 'Walker',
+    username: 'nathan'
+  }
+];

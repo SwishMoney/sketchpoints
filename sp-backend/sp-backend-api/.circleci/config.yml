@@ -1,0 +1,64 @@
+version: 2
+jobs:
+  build:
+    filters:
+      tags:
+        only: /.*/
+    working_directory: /app
+    docker:
+      - image: docker:17.07.0-ce-git
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            apk update
+            apk add --no-cache --update \
+              py-pip
+            pip install \
+              awscli \
+              docker-compose==1.16.1
+      - setup_remote_docker:
+          version: 17.07.0-ce
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/sp-backend-api.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker --version
+            docker load -i /caches/sp-backend-api.tar | true
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build --cache-from=sp-backend-api -t sp-backend-api .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/sp-backend-api.tar sp-backend-api
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/sp-backend-api.tar
+      - run:
+          name: Run Tests within Docker
+          command: |
+            docker-compose -f ./docker-compose.test.yml up
+      - deploy:
+          name: Push Docker Image to Amazon Container Registry
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              login="$(aws ecr get-login --no-include-email --region us-east-1)"
+              ${login}
+              docker tag sp-backend-api "${ECR_ENDPOINT}:latest"
+              docker push "${ECR_ENDPOINT}:latest"
+              TAG=$(git describe --tags)
+              if [[ "$TAG" == *"release"* ]]; then
+                docker tag sp-backend-api "${ECR_ENDPOINT}:$TAG"
+                docker push "${ECR_ENDPOINT}:$TAG"
+              fi
+            fi

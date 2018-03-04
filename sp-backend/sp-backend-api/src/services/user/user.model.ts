@@ -4,6 +4,6 @@ export interface User {
   firstName?: string;
   lastName?: string;
   email: string;
-  passwordHash: string;
+  password: string;
   createdDate: string;
 }

@@ -1,36 +1,31 @@
 import { S3 } from 'aws-sdk';
 import { utc } from 'moment';
 import * as uuid from 'uuid/v4';
-import { getExtension } from 'mime/lite';
-import { logger } from '../helpers';
-import { decodeViewerFromHeaders } from '../services/AuthService';
-import { getConfigValue } from '../helpers/utils';
-import { CONFIG_KEYS } from '../helpers/constants';
+import { getExtension } from 'mime';
+import { logger, config } from '../helpers';
+import { decodeUserFromHeaders } from '../services/auth';
 
 const ALLOWED_EXTENSIONS = ['png', 'jpeg', 'gif'];
 
-export function signS3Attachment(secretKey) {
-  return async (req, res) => {
-    const STAGE = await getConfigValue(CONFIG_KEYS.STAGE);
-    const S3_BUCKET = await getConfigValue(CONFIG_KEYS.S3_BUCKET);
-    const cookieName = await getConfigValue(CONFIG_KEYS.COOKIE_NAME);
+export function signS3Attachment(secretKey: string) {
+  return async (req: any, res: any) => {
     const s3 = new S3();
     const fileName = req.body.name;
     const fileType = req.body.type;
     const fileSize = req.body.size;
 
-    logger().log('info', 'Uploading File', {
+    logger.info('Uploading File', {
       fileName,
       fileType,
       fileSize
     });
 
     const jwtFromAuth = req.header('Authorization') && req.header('Authorization').replace('Bearer ', '');
-    const jwtFromCookie = req.cookies[cookieName];
+    const jwtFromCookie = req.cookies[config.cookieName];
 
-    const viewer = decodeViewerFromHeaders(secretKey, jwtFromAuth || jwtFromCookie);
+    const user = decodeUserFromHeaders(secretKey, jwtFromAuth || jwtFromCookie);
 
-    if (viewer.isPublicUser()) {
+    if (user) {
       return res.status(400).send({
         error: 'You must be logged in to upload images'
       });
@@ -52,10 +47,10 @@ export function signS3Attachment(secretKey) {
       extension = 'jpg';
     }
 
-    const newFileName = `${STAGE.substr(0, 1)}-${viewer.user.username}-${uuid()}.${extension}`;
+    const newFileName = `${config.environment.substr(0, 1)}-${user.username}-${uuid()}.${extension}`;
 
     const s3Params = {
-      Bucket: S3_BUCKET,
+      Bucket: config.s3Bucket,
       Key: newFileName,
       Expires: 60,
       ContentType: fileType,
@@ -64,7 +59,7 @@ export function signS3Attachment(secretKey) {
 
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
       if (err) {
-        logger().log('error', 'Error Saving to S3', {
+        logger.error('Error Saving to S3', {
           err,
           message: err.message
         });

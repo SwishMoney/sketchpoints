@@ -1,0 +1,35 @@
+
+# main user model
+type User {
+    id: String!
+    username: String!
+    firstName: String
+    lastName: String
+    email: String!
+    password: String!
+    createDate: String!
+}
+
+# createUser
+input UserInput {
+    username: String!
+    firstName: String
+    lastName: String
+    email: String!
+    password: String
+}
+input CreateUserInput {
+    user: UserInput!
+}
+type CreateUserResponse {
+    user: User!
+    jwt: String!
+}
+
+############## QUERIES and MUTATIONS #############
+type Query {
+    getUser: User
+}
+type Mutation {
+    createUser(input: CreateUserInput!): CreateUserResponse
+}

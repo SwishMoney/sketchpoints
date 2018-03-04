@@ -6,6 +6,7 @@
     "lib": ["es7", "esnext.asynciterable", "dom"],
     "sourceMap": true,
     "outDir": "_dist",
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitThis": true
   },

@@ -3,12 +3,12 @@ import { logger } from './logger';
 
 let db: Db = null;
 
-export async function createConnection(url): Promise<Db> {
+export async function createConnection(url: string): Promise<Db> {
   if (db !== null) {
     return Promise.resolve(db);
   }
   db = await MongoClient.connect(url);
-  logger().log('info', `Connected to MongoDB database "${db.databaseName}"`);
+  logger.info(`Connected to MongoDB database "${db.databaseName}"`);
   return db;
 }
 

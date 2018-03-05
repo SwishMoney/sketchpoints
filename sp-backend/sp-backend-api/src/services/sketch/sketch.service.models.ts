@@ -2,6 +2,10 @@ export interface Sketch {
   _id: any;
   gifUrl?: string;
   movUrl?: string;
+  sketchPages?: SketchPage[];
+}
+
+export interface SketchPage {
   sketchFrames?: SketchFrame[];
 }
 

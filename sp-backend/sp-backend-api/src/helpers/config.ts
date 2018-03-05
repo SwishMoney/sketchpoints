@@ -1,7 +1,5 @@
 import { Environment, LogLevel } from './constants';
 
-const vars = require('../../../../env.json');
-
 export interface Config {
   environment: Environment;
   mongoUrl: string;
@@ -16,7 +14,7 @@ export interface Config {
 
 export const config: Partial<Config> = {};
 
-export function initConfig(environment: string = Environment.DEVELOPMENT) {
+export function initConfig(environment: string = Environment.DEVELOPMENT, vars: any) {
   Object.assign(config, vars[environment], {
     environment: environment
   });

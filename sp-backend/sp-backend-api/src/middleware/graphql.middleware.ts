@@ -2,12 +2,13 @@ import { v4 as uuid } from 'uuid';
 import { mergeSchemas } from 'graphql-tools';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { logger } from '../helpers';
+import { healthSchema } from '../services/health';
 import { userSchema } from '../services/user';
 
 export function graphql() {
   return graphqlExpress((req: any) => {
     return {
-      schema: mergeSchemas({ schemas: [userSchema] }),
+      schema: mergeSchemas({ schemas: [healthSchema, userSchema] }),
       context: {
         rid: `api-${uuid()}`,
         headers: req.headers,

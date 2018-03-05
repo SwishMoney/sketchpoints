@@ -1,10 +1,10 @@
 import { hash, compare } from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { config } from '../../helpers';
-import { fetchUser, User } from '../user';
+import { getUser, User } from '../user';
 
 export async function authenticateUser(email: string, password: string): Promise<User> {
-  const user = await fetchUser({ email });
+  const user = await getUser({ user: { email } });
   const validPassword = await verifyPassword(password, user);
   return validPassword ? user : null;
 }
@@ -17,7 +17,7 @@ export async function verifyPassword(passwordToTest: string, user: User): Promis
   if (!user) {
     return false;
   }
-  return compare(passwordToTest, user.passwordHash);
+  return compare(passwordToTest, user.password);
 }
 
 export async function generateJWT(secretKey: string, user: User): Promise<string> {

@@ -1,4 +1,3 @@
-
 # main user model
 type User {
     id: String!
@@ -10,17 +9,19 @@ type User {
     createDate: String!
 }
 
-# createUser
-input UserInput {
-    username: String!
+# common for multiple user transactions
+input UserPartial {
+    username: String
     firstName: String
     lastName: String
-    email: String!
+    email: String
     password: String
 }
-input CreateUserInput {
-    user: UserInput!
+input UserRequest {
+    user: UserPartial!
 }
+
+# createUser
 type CreateUserResponse {
     user: User!
     jwt: String!
@@ -28,8 +29,8 @@ type CreateUserResponse {
 
 ############## QUERIES and MUTATIONS #############
 type Query {
-    getUser: User
+    getUser(input: UserRequest!): User
 }
 type Mutation {
-    createUser(input: CreateUserInput!): CreateUserResponse
+    createUser(input: UserRequest!): CreateUserResponse
 }

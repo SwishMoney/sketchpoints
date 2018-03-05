@@ -5,3 +5,8 @@ declare namespace NodeJS {
 }
 
 declare module 'winston';
+
+declare module '*.json' {
+  const value: any;
+  export default value;
+}
